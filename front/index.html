@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Test</title>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcAebcZAAAAAMvj8Lkc__paSPYQ_2BeGWrVGsAC"></script>
+</head>
+<body>
+    <!-- method post to /api/recaptcha -->
+    <form id="form-demo" method="post" action="http://localhost:7071/api/recaptcha">
+        <input name="input" id="input-demo" type="text">
+        <input name="response" id="input-demo-response" type="text">
+        <button id="btn"
+          class="g-recaptcha"
+          data-sitekey="6LcAebcZAAAAAMvj8Lkc__paSPYQ_2BeGWrVGsAC"
+          data-callback="callbackForm"
+          data-action="submit">submit</button>
+    </form>
+
+  <script>
+    function callbackForm(event) { 
+      // 
+      grecaptcha.ready(function () {
+        grecaptcha.execute('6LcAebcZAAAAAMvj8Lkc__paSPYQ_2BeGWrVGsAC', { action: 'submit' })
+          .then(function (token) {
+            let input = {};
+            
+            input.demo = document.getElementById('input-demo').value;
+            input.tokenRecaptcha = token;
+            fetch('http://localhost:7071/api/recaptcha', {
+              method: "post",
+              body: JSON.stringify(input),
+              headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/json"
+              }
+            })
+            .then(data => data.text())
+            .then(response => console.log(response));
+            console.log(input);
+          });
+      });
+      event.preventDeafult();
+    }
+  </script>
+</body>
+</html>
