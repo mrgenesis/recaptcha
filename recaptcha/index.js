@@ -7,12 +7,15 @@ module.exports = async function (context, req) {
     })
     .then(response => response.json())
     .then(result => {
-      console.log('token >>>>>>>>>>>>>>>>>>>>> ', req.body.tokenRecaptcha, ' <<<<<<<<<<<<<<<<<<')
       context.res = {
         body: result
       };
+    })
+    .catch(err => {
+      context.log(err);
+      context.res = {
+        status: 501,
+        body: { Error: 'Tente mais tarde.' }
+      }
     });
-    // console.log('\n\nresult >>>>>>>>>>>>>>>>>>>>> \n\n', req.body, '\n\n <<<<<<<<<<<<<<<<<<\n\n\n')
-
-
 }
